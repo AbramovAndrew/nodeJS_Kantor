@@ -2,26 +2,26 @@ var http = require('http');
 var url = require('url');
 var querystring = require('querystring');
 var static = require('node-static');
-var file = new static.Server('.');
+var file = new static.Server('.', {
+  cache: 0
+});
 
 
 function accept(req, res) {
 
-  // если URL запроса /vote, то...
-  if (req.url == '/vote') {
-    // через 1.5 секунды ответить сообщением
+  if (req.url == '/phones.json') {
+    // искусственная задержка для наглядности
     setTimeout(function() {
-      res.end('Ваш голос принят: ' + new Date());
-    }, 1500);
+      file.serve(req, res);
+    }, 2000);
   } else {
-    // иначе считаем это запросом к обычному файлу и выводим его
-    file.serve(req, res); // (если он есть)
+    file.serve(req, res);
   }
 
 }
 
 
-// ------ этот код запускает веб-сервер -------
+// ------ запустить сервер -------
 
 if (!module.parent) {
   http.createServer(accept).listen(8080);
