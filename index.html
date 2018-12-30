@@ -10,19 +10,29 @@
   <button onclick="loadPhones()">Загрузить phones.json!</button>
 
   <script>
+    button = document.querySelector('button');
     function loadPhones() {
       var xhr = new XMLHttpRequest();
 
-      xhr.open('GET', 'phones.json', false);
+      xhr.open('GET', 'phones.json', true);
       xhr.send();
 
-      if (xhr.status != 200) {
-        // обработать ошибку
-        alert('Ошибка ' + xhr.status + ': ' + xhr.statusText);
-      } else {
-        // вывести результат
-        alert(xhr.responseText);
+      xhr.onreadystatechange = function() { // (3)
+        <!-- console.log(xhr.readyState); -->
+        if (xhr.readyState != 4) return;
+      
+        button.innerHTML = 'Готово!';
+      
+        if (xhr.status != 200) {
+          alert(xhr.status + ': ' + xhr.statusText);
+        } else {
+          alert(xhr.responseText);
+        }
+      
       }
+
+      button.innerHTML = 'Загружаю...'; // (2)
+      button.disabled = true;
     }
   </script>
 
